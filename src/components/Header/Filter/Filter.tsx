@@ -1,5 +1,5 @@
 import './filter.sass';
-import {useState} from "react";
+import {useEffect, useRef, useState} from "react";
 
 interface IFilter {
   options: string[];
@@ -8,6 +8,21 @@ interface IFilter {
 export function Filter({ options, onSelect }: IFilter ) {
   const [selectedOption, setSelectedOption] = useState(options[0]);
   const [isOpen, setIsOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null)
+
+  const handleClickOutside = (event: MouseEvent) => {
+    if (ref.current && !ref.current.contains(event.target as Node)) {
+      setIsOpen(false);
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener('click', handleClickOutside);
+
+    return () => {
+      window.removeEventListener('click', handleClickOutside);
+    };
+  }, []);
 
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
@@ -20,16 +35,16 @@ export function Filter({ options, onSelect }: IFilter ) {
   };
 
   return (
-      <div className="dropdown">
-        <div className="dropdown-toggle" onClick={toggleDropdown}>
+      <div className="dropdown" ref={ref}>
+        <div className="dropdown__heading" onClick={toggleDropdown}>
           {selectedOption || 'Выберите опцию'}
         </div>
         {isOpen && (
-            <ul className="dropdown-list">
+            <ul className="dropdown__list">
               {options.map((option, index) => (
                   <li
                       key={index}
-                      className="dropdown-item"
+                      className="dropdown__item"
                       onClick={() => handleOptionClick(option)}
                   >
                     {option}
