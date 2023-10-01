@@ -1,31 +1,31 @@
 import './header.sass';
 import {Filter} from "./Filter";
-import {useState} from "react";
 
-const heading = ['График общей ликвидации']
-const currency = ['Bitcoin']
-const period = ['Весь', 'За 5 лет', 'За год', 'За месяц', 'За неделю', 'За сутки', 'За час']
+import {useDispatch, useSelector} from "react-redux";
+import {RootState} from "../../store/reducer.ts";
+import {currency, heading, period} from "../../constants/constantsMenu.ts";
+import {changeCurrency, changeHeading, changePeriod} from "../../store/action.ts";
 
 export function Header() {
-  const [headingValue, setHeadingValue] = useState(heading[0])
-  const [currencyValue, setCurrencyValue] = useState(currency[0])
-  const [periodValue, setPeriodValue] = useState(period[0])
-
+let headingValue = useSelector<RootState, string>(state => state.choiceHeading)
+let currencyValue = useSelector<RootState, string>(state => state.choiceCurrency)
+let periodValue = useSelector<RootState, string>(state => state.choicePeriod)
+  const dispatch = useDispatch()
   function handleHeading(value:string) {
-    setHeadingValue(value)
+    dispatch(changeHeading(value))
   }
   function handleCurrency(value:string) {
-    setCurrencyValue(value)
+    dispatch(changeCurrency(value))
   }
   function handlePeriod(value:string) {
-    setPeriodValue(value)
+    dispatch(changePeriod(value))
   }
 
   return (
     <header className="header">
-      <Filter options={heading} onSelect={handleHeading} key={'heading'} />
-      <Filter options={currency} onSelect={handleCurrency} key={'currency'} />
-      <Filter options={period} onSelect={handlePeriod} key={'period'} />
+      <Filter options={heading} onSelect={handleHeading} selectedOption={headingValue} key={'heading'} />
+      <Filter options={currency} onSelect={handleCurrency} selectedOption={currencyValue} key={'currency'} />
+      <Filter options={period} onSelect={handlePeriod} selectedOption={periodValue} key={'period'} />
     </header>
   );
 }

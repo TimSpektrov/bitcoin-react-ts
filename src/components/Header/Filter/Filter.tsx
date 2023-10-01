@@ -3,10 +3,10 @@ import {useEffect, useRef, useState} from "react";
 
 interface IFilter {
   options: string[];
+  selectedOption: string;
   onSelect: (option: string) => void;
 }
-export function Filter({ options, onSelect }: IFilter ) {
-  const [selectedOption, setSelectedOption] = useState(options[0]);
+export function Filter({ options, onSelect, selectedOption}: IFilter ) {
   const [isOpen, setIsOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null)
 
@@ -29,7 +29,7 @@ export function Filter({ options, onSelect }: IFilter ) {
   };
 
   const handleOptionClick = (option: string) => {
-    setSelectedOption(option);
+    // setSelectedOption(option);
     onSelect(option);
     setIsOpen(false);
   };
