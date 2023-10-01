@@ -1,31 +1,20 @@
 import './main.sass';
-import axios from "axios";
-import {useEffect, useState} from "react";
+import {useEffect} from "react";
+import {useDispatch, useSelector} from "react-redux";
+import {RootState} from "../../store/reducer.ts";
+import {requestDataAsync} from "../../store/requests/action.ts";
 
 export function Main() {
-const [value, setValue] = useState([])
+    let choicePeriod = useSelector<RootState, string>(state => state.menu.choicePeriod)
+    let choiceCurrency = useSelector<RootState, string>(state => state.menu.choiceCurrency)
+    const dispatch = useDispatch();
 
-    console.log(value)
-  useEffect(() => {
-    // Создаем функцию для отправки GET-запроса к CoinGecko API
-      try {
-        axios
-            .get('https://api.coingecko.com/api/v3/coins/bitcoin')
-            .then(res => {
-                setValue(res.data.tickers)
-                // setValue(res.data)
-            })
-      } catch (error) {
-        console.error('Ошибка при получении данных:', error);
-      }
+    useEffect(() => {
+      dispatch(requestDataAsync() as any)
+    }, [choicePeriod, choiceCurrency]);
+    return (
+        <main className="main">
 
-
-    // Вызываем функцию при загрузке компонента
-  }, []);
-  return (
-
-      <main className="main">
-
-      </main>
-  );
+        </main>
+    );
 }
