@@ -4,13 +4,14 @@ import {Filter} from "./Filter";
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "../../store/reducer.ts";
 import {currency, heading, period} from "../../constants/constantsMenu.ts";
-import {changeCurrency, changeHeading, changePeriod} from "../../store/action.ts";
+import {changeCurrency, changeHeading, changePeriod} from "../../store/menu/action.ts";
+
 
 export function Header() {
-let headingValue = useSelector<RootState, string>(state => state.choiceHeading)
-let currencyValue = useSelector<RootState, string>(state => state.choiceCurrency)
-let periodValue = useSelector<RootState, string>(state => state.choicePeriod)
-  const dispatch = useDispatch()
+let headingValue = useSelector<RootState, string>(state => state.menu.choiceHeading)
+let currencyValue = useSelector<RootState, string>(state => state.menu.choiceCurrency)
+let periodValue = useSelector<RootState, string>(state => state.menu.choicePeriod)
+const dispatch = useDispatch()
   function handleHeading(value:string) {
     dispatch(changeHeading(value))
   }

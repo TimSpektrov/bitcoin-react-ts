@@ -1,43 +1,32 @@
 import {Reducer} from "react";
-import {AllChangeAction, CHANGE_CURRENCY, CHANGE_HEADING, CHANGE_PERIOD, ChangePeriodAction} from "./action.ts";
+// import {AllChangeAction, CHANGE_CURRENCY, CHANGE_HEADING, CHANGE_PERIOD} from "./action.ts";
 import {currency, heading, period} from "../constants/constantsMenu.ts";
-
-export interface IDataItem {
-
-}
+import {MenuChangeActions, menuReducer, MenuState} from "./menu/reducer.ts";
+import {CHANGE_CURRENCY, CHANGE_HEADING, CHANGE_PERIOD} from "./menu/action.ts";
 
 export type RootState = {
-    choiceHeading: string,
-    choiceCurrency: string,
-    choicePeriod: string,
+    menu: MenuState,
 }
 
-const initialState: RootState = {
-    choiceHeading: heading[0],
-    choiceCurrency: currency[0],
-    choicePeriod: period[0],
+export const initialState: RootState = {
+    menu: {
+        choiceHeading: heading[0],
+        choiceCurrency: currency[0],
+        choicePeriod: period[0],
+    }
 }
 
-type AllAction = AllChangeAction;
+type AllAction = MenuChangeActions;
 
 export const rootReducer: Reducer<RootState, AllAction> = (state = initialState, action) => {
     switch (action.type) {
         case CHANGE_HEADING:
-            return {
-                ...state,
-                choiceHeading: action.choiceHeading
-            }
         case CHANGE_CURRENCY:
-            return {
-                ...state,
-                choiceCurrency: action.choiceCurrency
-            }
         case CHANGE_PERIOD:
             return {
                 ...state,
-                choicePeriod: action.choicePeriod
+                menu: menuReducer(state.menu, action)
             }
-
         default:
             return state;
     }
