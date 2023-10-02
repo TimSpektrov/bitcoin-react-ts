@@ -8,9 +8,12 @@ interface IChart {
 }
 export function Chart({data}: IChart ) {
   const svgRef = useRef();
-  const [width, setWidth] = useState(800);
+  const [width, setWidth] = useState(window.innerWidth);
   const [height, setHeight] = useState(400);
 
+  window.addEventListener('resize', () => {
+    setWidth(window.innerWidth)
+  })
   useEffect(() => {
     // Очистите предыдущий график при изменении данных
     d3.select(svgRef.current).selectAll('*').remove();
