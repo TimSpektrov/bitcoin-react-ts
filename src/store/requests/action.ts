@@ -1,5 +1,5 @@
-import {ThunkAction} from '@reduxjs/toolkit';
-import {Action, ActionCreator} from "redux";
+import {ThunkAction, Action} from '@reduxjs/toolkit';
+import {ActionCreator} from "redux";
 import axios from "axios";
 import {PERIOD, URL_REQUEST} from "../../constants/API.ts";
 import {RootState} from "../reducer.ts";
@@ -44,11 +44,17 @@ export const requestDataError: ActionCreator<RequestDataErrorAction> = (error) =
 
 export const requestDataAsync = (): ThunkAction<void, RootState, unknown, Action<string>> => (dispatch, getState) => {
     dispatch(requestData())
-    let period = PERIOD.find(item => item.name === getState().menu.choicePeriod)
+    const period = PERIOD.find(item => item.name === getState().menu.choicePeriod)
     axios
-        .get(`${URL_REQUEST}${period?.link}?fsym=BTC&tsym=${getState().menu.choiceCurrency}`)
-        .then((res: any) => {
+        .get(
+          `${URL_REQUEST}${period?.link}?fsym=BTC&tsym=${getState().menu.choiceCurrency}`
+        )
+        .then((res) => {
             const data = res.data.Data.Data
+            console.log(data)
+            // data.length > 0
+            //   ? dispatch(requestDataSuccess(data))
+            //   : setTimeout(requestDataAsync(), 1000)
             dispatch(requestDataSuccess(data))
         })
         .catch((error: Error) => {
