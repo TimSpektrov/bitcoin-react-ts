@@ -26,7 +26,7 @@ ChartJS.register(
   Legend,
   Tooltip,
   LineController,
-  BarController
+  BarController,
 );
 
 export function Main() {
@@ -35,7 +35,6 @@ export function Main() {
     const dataList = useSelector<RootState, IItemData[]>(state => state.request.data)
     // let isLoading = useSelector<RootState, boolean>(state => state.request.loading)
     const dispatch = useDispatch();
-
     // console.log(dataList.map(item => new Date(item.time)))
     useEffect(() => {
       dispatch(requestDataAsync())
@@ -55,23 +54,27 @@ export function Main() {
                 data: close,
                 borderColor: '#fff',
                 pointStyle: 'line',
-                borderWidth: 1,
+                borderWidth: 2,
                 tension: 0.2,
-            },
-            {
-                type: 'bar' as const,
-                label: 'High',
-                data: high,
-                backgroundColor: 'rgb(255, 99, 132)',
-                tension: 0.2,
+
+                fill: false, // Не заполнять область под линией
             },
             {
                 type: 'bar' as const,
                 label: 'Low',
                 data: low,
-                backgroundColor: 'rgb(75, 192, 192)',
+                backgroundColor: '#474a23', // Цвет заполнения столбцов
+                base: dataList[0]?.open,
             },
-        ]}
+            {
+                type: 'bar' as const,
+                label: 'High',
+                data: high,
+                backgroundColor: '#473a33', // Цвет заполнения столбцов
+                base: dataList[0]?.open,
+            },
+        ]
+    }
 
     const options = {
         scales: {
@@ -79,10 +82,11 @@ export function Main() {
                 stacked: true,
             },
             y: {
-                stacked: true,
+                stacked: false, // Если хотите, чтобы график "Low" начинался не с нуля, измените на true
+                beginAtZero: false,
             },
         },
-    }
+    };
     const lineRef = useRef()
 
     return (

@@ -51,7 +51,7 @@ export const requestDataAsync = (): ThunkAction<void, RootState, unknown, Action
         )
         .then((res) => {
             const data = res.data.Data.Data
-            console.log(data)
+            console.log(res)
             // data.length > 0
             //   ? dispatch(requestDataSuccess(data))
             //   : setTimeout(requestDataAsync(), 1000)
