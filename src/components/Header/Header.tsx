@@ -2,7 +2,7 @@ import './header.sass';
 import {Filter} from "./Filter";
 
 import {useDispatch, useSelector} from "react-redux";
-import {RootState} from "../../store/reducer.ts";
+import {RootState} from "../../store";
 import {heading} from "../../constants/constantsMenu.ts";
 import {changeCurrency, changeHeading, changePeriod} from "../../store/menu/action.ts";
 import {FSYM as currencyOptions, PERIOD} from "../../constants/API.ts";

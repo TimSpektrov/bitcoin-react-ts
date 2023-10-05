@@ -6,7 +6,7 @@ import {
     ChangeCurrencyAction,
     ChangeHeadingAction, ChangePeriodAction
 } from "./action.ts";
-import {initialState} from "../reducer.ts";
+import {initialState} from "../index.ts";
 
 export type MenuState = {
     choiceHeading: string,
@@ -35,7 +35,6 @@ export const menuReducer: Reducer<MenuState, MenuChangeActions> = (state = initi
                 ...state,
                 choicePeriod: action.choicePeriod
             }
-
         default:
             return state;
     }

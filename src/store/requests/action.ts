@@ -1,8 +1,8 @@
-import {ThunkAction, Action} from '@reduxjs/toolkit';
-import {ActionCreator} from "redux";
+import {Action, ActionCreator} from "redux";
 import axios from "axios";
 import {PERIOD, URL_REQUEST} from "../../constants/API.ts";
-import {RootState} from "../reducer.ts";
+import {RootState} from "../index.ts";
+import {ThunkAction} from "redux-thunk";
 
 export interface IItemData {
     close: number,
@@ -51,10 +51,12 @@ export const requestDataAsync = (): ThunkAction<void, RootState, unknown, Action
         )
         .then((res) => {
             const data = res.data.Data.Data
-            console.log(res)
-            // data.length > 0
-            //   ? dispatch(requestDataSuccess(data))
-            //   : setTimeout(requestDataAsync(), 1000)
+            if(data.length < 1) {
+                setTimeout(() => {
+                    dispatch(requestDataAsync());
+                }, 1000);
+            }
+
             dispatch(requestDataSuccess(data))
         })
         .catch((error: Error) => {

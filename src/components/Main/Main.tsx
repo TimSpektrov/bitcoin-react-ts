@@ -1,8 +1,7 @@
 import './main.sass';
 import {useEffect, useRef} from "react";
 import {useDispatch, useSelector} from "react-redux";
-import {RootState} from "../../store/reducer.ts";
-import {IItemData, requestDataAsync} from "../../store/requests/action.ts";
+import {IItemData, requestDataAsync} from "../../store/requests/action";
 import {
     Chart as ChartJS,
     LinearScale,
@@ -16,6 +15,7 @@ import {
     BarController,
 } from 'chart.js';
 import { Chart } from 'react-chartjs-2';
+import {RootState} from "../../store";
 
 ChartJS.register(
   LinearScale,
@@ -30,14 +30,14 @@ ChartJS.register(
 );
 
 export function Main() {
-    let choicePeriod = useSelector<RootState, string>(state => state.menu.choicePeriod)
-    let choiceCurrency = useSelector<RootState, string>(state => state.menu.choiceCurrency)
+    const choicePeriod = useSelector<RootState, string>(state => state.menu.choicePeriod)
+    const choiceCurrency = useSelector<RootState, string>(state => state.menu.choiceCurrency)
     const dataList = useSelector<RootState, IItemData[]>(state => state.request.data)
-    // let isLoading = useSelector<RootState, boolean>(state => state.request.loading)
+    const isLoading = useSelector<RootState, boolean>(state => state.request.loading)
     const dispatch = useDispatch();
-    // console.log(dataList.map(item => new Date(item.time)))
+
     useEffect(() => {
-      dispatch(requestDataAsync())
+      dispatch(requestDataAsync() as any)
     }, [choicePeriod, choiceCurrency]);
 
     const labels = dataList.map(item => (new Date(item.time)).toLocaleTimeString())
@@ -91,7 +91,7 @@ export function Main() {
 
     return (
         <main className="main">
-            <Chart type='bar' data={chartData} options={options} ref={lineRef}/>
+            {isLoading ? 'loading...' : <Chart type='bar' data={chartData} options={options} ref={lineRef}/>}
         </main>
     );
 }
